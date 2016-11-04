@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qinyadan.brick.account.v1.dao.PermissionDao">
+
+	<resultMap type="com.qinyadan.brick.market.account.model.v1.SysPermissions"
+		id="syspermissionMap">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<id column="PERMISSION" property="permission" jdbcType="VARCHAR" />
+		<id column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+		<id column="AVAILABLE" property="available" jdbcType="BIT" />
+	</resultMap>
+	
+	<select id="selectByPrimaryKey" resultMap="syspermissionMap" parameterType="java.lang.Integer">
+		select * from sys_permissions where id = #{id}
+	</select>
+	
+	<insert id="saveByModel"
+		parameterType="com.qinyadan.brick.market.account.model.v1.SysPermissions"
+		useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+		insert into sys_permissions
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="permission != null">
+				PERMISSION,
+			</if>
+			<if test="description != null">
+				DESCRIPTION,
+			</if>
+			<if test="available != null">
+				AVAILABLE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="permission != null">
+				#{permission,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="available != null">
+				#{available,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from sys_permissions id= #{id}
+	</delete>
+	
+	<select id="selectPageByModel" resultMap="syspermissionMap" parameterType="java.util.HashMap">
+		select * from  sys_permissions 
+		<where>
+			<if test="sysPermissions.description">
+				AND description LIKE CONCAT(#{sysPermissions.description})
+			</if>
+			<if test="sysPermissions.permission">
+				AND permission LIKE CONCAT(#{sysPermissions.permission}) 
+			</if>
+		</where>
+		<if test="limit != null and limit != 0">
+			<if test="offset != null and offset != 0">
+					limit #{limit} offset #{offset};
+			</if>
+		</if>
+	</select>
+</mapper>

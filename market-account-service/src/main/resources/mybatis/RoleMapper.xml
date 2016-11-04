@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qinyadan.brick.account.v1.dao.RoleDao">
+
+	<resultMap type="com.qinyadan.brick.market.account.model.v1.SysRoles"
+		id="sysRolesMap">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="ROLE" property="role" jdbcType="VARCHAR" />
+		<result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+		<result column="AVAILABLE" property="available" jdbcType="BIT" />
+	</resultMap>
+
+	<resultMap
+		type="com.qinyadan.brick.market.account.model.v1.SysRolesPermissions"
+		id="sysRolesPermissionsMap">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="ROLE_ID" property="roleId" jdbcType="INTEGER" />
+		<result column="PERMISSION_ID" property="permissionId"
+			jdbcType="INTEGER" />
+	</resultMap>
+
+	<insert id="saveByModel" parameterType="com.qinyadan.brick.market.account.model.v1.SysRoles"
+		useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+		insert into sys_roles
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="role != null">
+				ROLE,
+			</if>
+			<if test="description != null">
+				DESCRIPTION,
+			</if>
+			<if test="available != null">
+				AVAILABLE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="role != null">
+				#{role,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="available != null">
+				#{available,jdbcType=BIT},
+			</if>
+		</trim>
+	</insert>
+
+	<insert id="saveSysRP" parameterType="com.qinyadan.brick.market.account.model.v1.SysRolesPermissions" useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+		insert into sys_roles_permissions
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="roleId != null">
+				ROLE_ID,
+			</if>
+			<if test="permissionId != null">
+				PERMISSION_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="roleId != null">
+				#{roleId,jdbcType=INTEGER},
+			</if>
+			<if test="permissionId != null">
+				#{permissionId,jdbcType=INTEGER},
+			</if>
+		</trim>
+
+	</insert>
+	<select id="selectByPrimaryKey" resultMap="sysRolesMap">
+		select * from
+		sys_roles where id=#{id}
+	</select>
+
+	<update id="updateByModel" parameterType="com.qinyadan.brick.market.account.model.v1.SysRoles">
+		update sys_roles
+		<set>
+			<if test="id != null">
+				ID = #{id,jdbcType=INTEGER},
+			</if>
+			<if test="role != null">
+				ROLE = #{role,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				DESCRIPTION = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="available != null">
+				AVAILABLE = #{available,jdbcType=BIT},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<delete id="deleteByPrimaryKey">
+		delete from sys_roles where id =#{id}
+	</delete>
+
+	<!-- 查询关联关系表 -->
+	<select id="findUsersByRolesId"
+		resultType="com.qinyadan.brick.market.account.model.v1.UserGroupRelation"
+		parameterType="java.util.HashMap">
+		SELECT
+		u.ID as userId,
+		u.realname as USERNAME,
+		u.EMAIL
+		FROM
+		sys_users u
+		<if test="id and chose">
+			LEFT JOIN sys_users_roles ur
+			ON u.ID = ur.USER_ID
+		</if>
+		<where>
+			<if test="id and chose">
+				AND ur.ROLE_ID = #{id}
+			</if>
+			<if test="!chose">
+				AND u.ID NOT IN
+				(SELECT
+				u.ID AS user_id
+				FROM
+				sys_users u
+				LEFT
+				JOIN sys_users_roles ur
+				ON u.ID = ur.USER_ID
+				WHERE ur.ROLE_ID= #{id})
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectPageByModel" resultMap="sysRolesMap">
+		select * from sys_roles where 1 =1  AND AVAILABLE = 1
+		<if test="sysRoles.role != null ">
+			AND ROLE LIKE CONCAT(#{sysRoles.role}) 
+		</if>
+		<if test="sysRoles.description != null ">
+			AND DESCRIPTION LIKE CONCAT (#{sysRoles.description})
+		</if>
+		<if test="limit != null and limit != 0">
+			<if test="offset != null and offset != 0">
+					limit #{limit} offset #{offset};
+			</if>
+		</if>
+	
+	</select>
+
+</mapper>

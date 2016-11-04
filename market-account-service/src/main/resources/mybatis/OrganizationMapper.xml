@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qinyadan.brick.account.v1.dao.OrganizationDao">
+
+	<resultMap type="com.qinyadan.brick.market.account.model.v1.SysOrganization"
+		id="sysOrganizationMap">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="NAME" property="name" jdbcType="VARCHAR" />
+		<result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+		<result column="PARENT_ID" property="parentId" jdbcType="INTEGER" />
+	</resultMap>
+
+	<select id="selectByModel" resultMap="sysOrganizationMap"
+		parameterType="com.qinyadan.brick.market.account.model.v1.SysOrganization">
+		select
+		*
+		from sys_organization
+		where 1=1
+		<if test="parentId == null">
+			AND PARENT_ID is null
+		</if>
+	</select>
+
+	<select id="getOrganizationTree"
+		resultType="com.qinyadan.brick.market.account.model.v1.OrganizationModel"
+		parameterType="java.lang.Integer">
+		SELECT s.ID,s.NAME,s.DESCRIPTION, s.PARENT_ID,p.NAME AS
+		parent_name FROM sys_organization s LEFT JOIN sys_organization p ON
+		p.ID=s.PARENT_ID where FIND_IN_SET(s.id,
+		query_children_organization(#{id}))
+	</select>
+
+	<insert id="saveModel"
+		parameterType="com.qinyadan.brick.market.account.model.v1.SysOrganization"
+		useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+		insert into sys_organization
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="name != null">
+				NAME,
+			</if>
+			<if test="description != null">
+				DESCRIPTION,
+			</if>
+			<if test="parentId != null">
+				PARENT_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from sys_organization where id = #{id}
+	</delete>
+</mapper>

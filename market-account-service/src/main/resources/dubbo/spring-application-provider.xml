@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+	<dubbo:application name="market-account-privider" /> 
+	<dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}"/>
+	<dubbo:monitor protocol="registry"/>
+	<dubbo:protocol name="dubbo" port="${account.privider.port}"  threadpool="cached"/>
+    
+    <bean id="passwordHelper" class="com.qinyadan.brick.account.v1.PasswordHelper">
+        <property name="algorithmName" value="md5"/>
+        <property name="hashIterations" value="2"/>
+    </bean>
+    
+    <bean id="userServiceImpl" class="com.qinyadan.brick.account.v1.impl.UserServiceImpl">
+    	<property name="passwordHelper" ref="passwordHelper"></property>
+    </bean>
+	<dubbo:service timeout="10000"  interface="com.qinyadan.brick.market.account.api.v1.UserService" 
+		ref="userServiceImpl" group="account"  version="0.0.1" owner="liuzhimin">
+	</dubbo:service>
+	
+	<bean id="organizationServiceImpl" class="com.qinyadan.brick.account.v1.impl.OrganizationServiceImpl"/>
+	<dubbo:service timeout="10000"  interface="com.qinyadan.brick.market.account.api.v1.OrganizationService" 
+		ref="organizationServiceImpl" group="account"  version="0.0.1" owner="liuzhimin">
+	</dubbo:service>
+	
+	<bean id="roleServiceImpl" class="com.qinyadan.brick.account.v1.impl.RoleServiceImpl"/>
+	<dubbo:service timeout="10000"  interface="com.qinyadan.brick.market.account.api.v1.RoleService" 
+		ref="roleServiceImpl" group="account"  version="0.0.1" owner="liuzhimin">
+	</dubbo:service>
+	
+	<bean id="permissionServiceImpl" class="com.qinyadan.brick.account.v1.impl.PermissionServiceImpl"/>
+	<dubbo:service timeout="10000"  interface="com.qinyadan.brick.market.account.api.v1.PermissionService" 
+		ref="permissionServiceImpl" group="account"  version="0.0.1" owner="liuzhimin">
+	</dubbo:service>
+	
+</beans>

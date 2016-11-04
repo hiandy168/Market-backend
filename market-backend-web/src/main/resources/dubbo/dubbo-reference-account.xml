@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans.xsd  
+        http://code.alibabatech.com/schema/dubbo  
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+               
+    <!-- 服务接口 -->
+   <dubbo:reference interface="com.qinyadan.brick.market.account.api.v1.UserService"  id="userService"  check="false" owner="liuzhimin" group="account"  version="0.0.1"/>
+   <dubbo:reference interface="com.qinyadan.brick.market.account.api.v1.PermissionService"  id="PermissionService"  check="false" owner="liuzhimin" group="account"  version="0.0.1"/>
+   <dubbo:reference interface="com.qinyadan.brick.market.account.api.v1.RoleService"  id="roleService"  check="false" owner="liuzhimin" group="account"  version="0.0.1"/>
+   <dubbo:reference interface="com.qinyadan.brick.market.account.api.v1.OrganizationService"  id="organizationService"  check="false" owner="liuzhimin" group="account"  version="0.0.1"/>
+</beans> 

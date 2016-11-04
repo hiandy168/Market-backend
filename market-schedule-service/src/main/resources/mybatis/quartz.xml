@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qinyadan.brick.quartz.service.dao.TbQuartzTaskDao">
+
+	<resultMap id="quartzInfoMap"
+		type="com.qinyadan.brick.quartz.service.model.TbQuartzTask">
+		<id column="task_id" jdbcType="INTEGER" property="taskId" />
+		<result column="task_name" jdbcType="VARCHAR" property="taskName" />
+		<result column="task_group" jdbcType="VARCHAR" property="taskGroup" />
+		<result column="task_des" jdbcType="VARCHAR" property="taskDes" />
+		<result column="task_url" jdbcType="VARCHAR" property="taskUrl" />
+		<result column="task_express" jdbcType="VARCHAR" property="taskExpress" />
+		<result column="task_key" jdbcType="VARCHAR" property="taskKey" />
+		<result column="task_status" jdbcType="TINYINT" property="taskStatus" />
+		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+		<result column="last_update_time" jdbcType="TIMESTAMP"
+			property="lastUpdateTime" />
+	</resultMap>
+
+	<select id="getAllQuartzInfo" parameterType="java.util.HashMap"
+		resultMap="quartzInfoMap">
+		select * from tb_quartz_task a where a.`task_name` like
+		CONCAT('%',#{taskName},'%')
+		AND a.`task_group` = #{taskGroup}
+		order by
+		a.`task_id` desc limit #{start} ,#{count}
+	</select>
+
+	<select id="getAllQuartzInfoNoStatus" parameterType="java.util.HashMap"
+		resultMap="quartzInfoMap">
+		select * from tb_quartz_task a where a.`task_group` =
+		#{taskGroup}
+		order by a.`task_id` desc limit #{start} ,#{count}
+	</select>
+
+</mapper>

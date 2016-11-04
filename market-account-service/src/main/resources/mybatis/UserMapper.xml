@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qinyadan.brick.account.v1.dao.UserDao">
+
+	<resultMap type="com.qinyadan.brick.market.account.model.v1.SysUsers"
+		id="sysUserMap">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="USERNAME" property="username" jdbcType="VARCHAR" />
+		<result column="REALNAME" property="realname" jdbcType="VARCHAR" />
+		<result column="SALT" property="salt" jdbcType="VARCHAR" />
+		<result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+		<result column="AGE" property="age" jdbcType="INTEGER" />
+		<result column="SEX" property="sex" jdbcType="INTEGER" />
+		<result column="EMAIL" property="email" jdbcType="VARCHAR" />
+		<result column="QQ" property="qq" jdbcType="VARCHAR" />
+		<result column="PHONE_NUMBER" property="phoneNumber" jdbcType="VARCHAR" />
+		<result column="OFFICE_TEL" property="officeTel" jdbcType="VARCHAR" />
+		<result column="LOCKED" property="locked" jdbcType="INTEGER" />
+	</resultMap>
+
+	<select id="selectByPrimaryKey" resultMap="sysUserMap">select * from sys_users where id=#{id} </select>
+	
+	<select id="selectOneByModel" parameterType="com.qinyadan.brick.market.account.model.v1.SysUsers"
+	resultMap="sysUserMap">
+		select * from sys_users where 1 = 1
+		<if test="id != null">AND  id=#{id} </if>
+		<if test="username != null">AND username = #{username} </if>
+	</select>
+
+	<resultMap type="com.qinyadan.brick.market.account.model.v1.SysUsersRoles"
+		id="sysUserRoleMap">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="USER_ID" property="userId" jdbcType="INTEGER" />
+		<result column="ROLE_ID" property="roleId" jdbcType="INTEGER" />
+	</resultMap>
+
+	<resultMap
+		type="com.qinyadan.brick.market.account.model.v1.SysUserOrganization"
+		id="sysUsersOrgMap">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="ORGANIZATION_ID" property="organizationId"
+			jdbcType="INTEGER" />
+		<result column="USER_ID" property="userId" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap type="com.qinyadan.brick.market.account.model.v1.User" id="UserMap">
+		 	<id column="id" property="id"/>
+			<collection property="userGroups" ofType="com.qinyadan.brick.market.account.model.v1.UserGroup" column="id" select="queryUserGroupsList"></collection>
+    </resultMap>
+
+	<insert id="saveByModel" parameterType="com.qinyadan.brick.market.account.model.v1.SysUsers"
+		useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+		insert into sys_users
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="username != null">
+				USERNAME,
+			</if>
+			<if test="realname != null">
+				REALNAME,
+			</if>
+			<if test="salt != null">
+				SALT,
+			</if>
+			<if test="password != null">
+				PASSWORD,
+			</if>
+			<if test="age != null">
+				AGE,
+			</if>
+			<if test="sex != null">
+				SEX,
+			</if>
+			<if test="email != null">
+				EMAIL,
+			</if>
+			<if test="qq != null">
+				QQ,
+			</if>
+			<if test="phoneNumber != null">
+				PHONE_NUMBER,
+			</if>
+			<if test="officeTel != null">
+				OFFICE_TEL,
+			</if>
+			<if test="locked != null">
+				LOCKED,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="username != null">
+				#{username,jdbcType=VARCHAR},
+			</if>
+			<if test="realname != null">
+				#{realname,jdbcType=VARCHAR},
+			</if>
+			<if test="salt != null">
+				#{salt,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="age != null">
+				#{age,jdbcType=INTEGER},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=INTEGER},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="qq != null">
+				#{qq,jdbcType=VARCHAR},
+			</if>
+			<if test="phoneNumber != null">
+				#{phoneNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="officeTel != null">
+				#{officeTel,jdbcType=VARCHAR},
+			</if>
+			<if test="locked != null">
+				#{locked,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	
+	<update id="updateByModel" parameterType="com.qinyadan.brick.market.account.model.v1.SysUsers">
+		update sys_users
+		<set>
+			<if test="record.id != null">
+				ID = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.username != null">
+				USERNAME = #{record.username,jdbcType=VARCHAR},
+			</if>
+			<if test="record.realname != null">
+				REALNAME = #{record.realname,jdbcType=VARCHAR},
+			</if>
+			<if test="record.salt != null">
+				SALT = #{record.salt,jdbcType=VARCHAR},
+			</if>
+			<if test="record.password != null">
+				PASSWORD = #{record.password,jdbcType=VARCHAR},
+			</if>
+			<if test="record.age != null">
+				AGE = #{record.age,jdbcType=INTEGER},
+			</if>
+			<if test="record.sex != null">
+				SEX = #{record.sex,jdbcType=INTEGER},
+			</if>
+			<if test="record.email != null">
+				EMAIL = #{record.email,jdbcType=VARCHAR},
+			</if>
+			<if test="record.qq != null">
+				QQ = #{record.qq,jdbcType=VARCHAR},
+			</if>
+			<if test="record.phoneNumber != null">
+				PHONE_NUMBER = #{record.phoneNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="record.officeTel != null">
+				OFFICE_TEL = #{record.officeTel,jdbcType=VARCHAR},
+			</if>
+			<if test="record.locked != null">
+				LOCKED = #{record.locked,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id =#{id}
+	</update>
+	
+	<update id="resetPassword">
+		UPDATE sys_users SET PASSWORD = #{password}
+		,SALT=#{salt}
+		WHERE username = #{username} AND
+		PASSWORD=#{currentPassword}
+	</update>
+
+	<insert id="saveSysUR"
+		parameterType="com.qinyadan.brick.market.account.model.v1.SysUsersRoles"
+		useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+		insert into sys_users_roles
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="userId != null">
+				USER_ID,
+			</if>
+			<if test="roleId != null">
+				ROLE_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+			<if test="roleId != null">
+				#{roleId,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<insert id="saveSysUO"
+		parameterType="com.qinyadan.brick.market.account.model.v1.SysUserOrganization"
+		useGeneratedKeys="true" keyProperty="id" keyColumn="ID">
+		insert into sys_user_organization
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="organizationId != null">
+				ORGANIZATION_ID,
+			</if>
+			<if test="userId != null">
+				USER_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="organizationId != null">
+				#{organizationId,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="deleteURBySysUserId" parameterType="java.lang.Integer">
+		delete from
+		sys_users_roles where user_id = #{id}
+	</delete>
+
+
+	<delete id="deleteOrgBySysUserId" parameterType="java.lang.Integer">
+		delete from
+		sys_user_organization where user_id = #{id}
+	</delete>
+
+	<select id="getRoleList" resultType="com.qinyadan.brick.market.account.model.v1.SysRoles">
+		select r.* from sys_roles r
+		left join sys_users_roles
+		ur on ur.role_id = r.id left join sys_users u
+		on u.id=ur.user_id where
+		u.username = #{username}
+	</select>
+
+	<select id="getPermissionList"
+		resultType="com.qinyadan.brick.market.account.model.v1.SysPermissions">
+		select p.* from sys_permissions p left join
+		`sys_roles_permissions` rp on rp.`PERMISSION_ID`=p.`ID` left join
+		sys_roles r on rp.`ROLE_ID`=r.`ID` left join sys_users_roles ur on
+		ur.role_id = r.id left join sys_users u on u.id=ur.user_id where
+		u.username = #{username}
+	</select>
+
+	<select id="getUsers" resultMap="UserMap" parameterType="java.util.HashMap">
+		SELECT
+		u.id,
+		u.username,
+		u.email,
+		u.locked,
+		u.realname,
+		u.qq,
+		u.phone_number,
+		u.age,
+		u.sex,
+		u.office_tel,
+		so.name as organization,
+		so.id
+		as organization_id
+		FROM
+		sys_users u
+		left join sys_user_organization suo
+		on u.id = suo.user_id
+		left join sys_organization so on
+		suo.organization_id = so.id
+		<where>
+			<if test="map.keyword">
+				AND u.username LIKE CONCAT('%', #{map.keyword}, '%') or
+				u.email like
+				CONCAT('%', #{map.keyword}, '%')
+			</if>
+			<if test="map.id">
+				AND m.ID = #{map.id}
+			</if>
+			<if test="map.organizationId">
+				suo.organization_id = #{map.organizationId}
+			</if>
+		</where>
+		<if test="limit != null and limit != 0">
+			<if test="offset != null and offset != 0">
+					limit #{limit} offset #{offset};
+			</if>
+		</if>
+	</select>
+
+
+	<select id="queryUserGroupsList"
+		resultType="com.qinyadan.brick.market.account.model.v1.UserGroup"
+		parameterType="Integer">
+		select
+		sr.DESCRIPTION as userGorup,
+		sr.id as user_Group_id
+		from
+		sys_roles sr
+		left join
+		sys_users_roles sur on sur.role_id = sr.id
+		where
+		sur.user_id = #{id}
+	</select>
+
+	<!-- 查询权限关系表 -->
+	<select id="findPermissionByRole"
+		resultType="com.qinyadan.brick.market.account.model.v1.GroupPermissionRelation"
+		parameterType="java.util.HashMap">
+		select p.ID as permissionId,
+		p.PERMISSION as permissionCode,
+		p.DESCRIPTION as permissionDescription
+		from sys_permissions p
+		<if test="id and chose">
+			left join sys_roles_permissions rp
+			on rp.PERMISSION_ID=p.ID
+		</if>
+		<where>
+			<if test="id and chose">
+				AND rp.ROLE_ID = #{id}
+			</if>
+			<if test="!chose">
+				AND p.ID NOT IN
+				(SELECT
+				r.ID AS permission_id
+				FROM
+				sys_permissions r
+				LEFT JOIN sys_roles_permissions rp
+				ON r.ID =
+				rp.PERMISSION_ID
+				WHERE rp.ROLE_ID= #{id})
+			</if>
+		</where>
+	</select>
+	
+</mapper>

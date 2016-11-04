@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.qinyadan.market</groupId>
+    <artifactId>all-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>market-backend</artifactId>
+  <packaging>pom</packaging>
+  <description>O2O供销系统后台管理</description>
+  
+  <modules>
+  	<module>market-order-api</module>
+  	<module>market-account-api</module>
+  	<module>market-base-api</module>
+  	<module>market-export-api</module>
+  	<module>market-job-api</module>
+  	<module>market-pick-api</module>
+  	<module>market-plan-api</module>
+  	<module>market-report-api</module>
+  	
+  	<module>market-schedule-api</module>
+  	<module>market-backend-web</module>
+  	<module>market-account-service</module>
+  	<module>market-logger-api</module>
+  	<module>market-logger-service</module>
+  	<module>market-schedule-service</module>
+  	<module>market-base-service</module>
+  	<module>market-order-service</module>
+  </modules>
+  
+  
+</project>
